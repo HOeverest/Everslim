@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everslim — Complete Your Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#CB4AA2; --pink-dark:#A9337F; --chartreuse:#E0E32D; --mint:#BCEBD2;
+    --ink:#02433E; --ink-soft:#5C7C77; --bg:#FFFFFF; --border:#D8D8D6;
+    --red:#B3261E; --red-bg:#FDECEC; --red-border:#F3C2BE;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter', Arial, Helvetica, sans-serif;background:var(--bg);color:var(--ink);}
+  .stage{max-width:620px;margin:0 auto;padding:44px 24px 60px;min-height:100vh;display:flex;flex-direction:column;}
+  .progress-line{display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Fraunces', Georgia, serif;font-weight:700;font-size:13px;color:var(--ink-soft);margin-bottom:28px;}
+  .progress-line .inf{color:var(--chartreuse);font-size:15px;}
+  .question-block{flex:1;}
+  .question-block h1{font-family:'Fraunces', Georgia, serif;font-weight:700;font-size:30px;line-height:1.18;color:var(--ink);margin:0 0 8px;}
+  .question-hint{font-size:13.5px;color:var(--ink-soft);margin:0 0 20px;}
+  .key-copy{background:#F7F5EF;border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-size:13.5px;color:var(--ink-soft);margin:14px 0 22px;}
+  .choose-label{font-family:'Fraunces', Georgia, serif;font-weight:700;font-size:17px;color:var(--ink);margin:22px 0 12px;}
+  .option-list{display:flex;flex-direction:column;gap:12px;margin-bottom:8px;}
+  .option-btn{display:block;width:100%;text-align:left;font-family:'Fraunces', Georgia, serif;font-size:16px;font-weight:600;color:var(--ink);background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 18px;cursor:pointer;transition:border-color .15s, background .15s;}
+  .option-btn:hover{border-color:var(--ink-soft);}
+  .option-btn.selected{border-color:var(--ink);}
+  .capture-btn{display:block;width:100%;text-align:center;font-family:'Fraunces', Georgia, serif;font-size:16px;font-weight:600;color:var(--ink);background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 18px;cursor:pointer;}
+  .capture-btn:hover{border-color:var(--ink-soft);}
+  .field-label{font-size:13px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-top:22px;display:block;}
+  .info-card{background:#F7F5EF;border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin:18px 0;}
+  .tri-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .tri-row:last-child{border-bottom:none;}
+  .tri-row .tri-label{font-size:13.5px;font-weight:600;color:var(--ink);flex:1;}
+  .tri-btns{display:flex;gap:6px;flex-shrink:0;}
+  .tri-btn{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:7px 12px;border-radius:16px;border:1.5px solid var(--border);background:#fff;color:var(--ink-soft);cursor:pointer;}
+  .tri-btn.selected{background:var(--ink);color:#fff;border-color:var(--ink);}
+  input[type=text], input[type=file], textarea{width:100%;font-family:inherit;font-size:15px;padding:11px 12px;border:2px solid var(--border);border-radius:10px;background:#fff;color:var(--ink);}
+  textarea{resize:vertical;min-height:90px;}
+  input:focus, textarea:focus{outline:none;border-color:var(--ink);}
+  .exit-card{background:var(--red-bg);border:1px solid var(--red-border);border-radius:14px;padding:22px;margin:16px 0;}
+  .exit-card p{margin:0;font-size:14px;color:var(--red);font-weight:600;line-height:1.55;}
+  .crisis-box{background:#fff;border:1px solid var(--red-border);border-radius:10px;padding:14px 16px;margin-top:14px;font-size:13px;color:var(--ink);}
+  .crisis-box strong{display:block;margin-bottom:4px;color:var(--red);}
+  .actions{margin-top:30px;}
+  .next-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:17px 20px;border:none;border-radius:32px;cursor:pointer;font-family:'Fraunces', Georgia, serif;font-weight:700;font-size:17px;color:var(--ink);background:linear-gradient(90deg, var(--mint) 0%, var(--chartreuse) 18%, var(--chartreuse) 82%, #F3B6DD 100%);}
+  .next-btn:disabled{background:#EDECE7;color:#A8A49A;cursor:not-allowed;}
+  .prev-link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-family:'Fraunces', Georgia, serif;font-weight:700;font-size:14px;color:var(--ink);background:none;border:none;cursor:pointer;padding:0;}
+  .prev-link[hidden]{display:none;}
+  .final-screen{text-align:center;padding-top:60px;}
+  .final-screen h1{font-family:'Fraunces',serif;font-size:28px;color:var(--ink);}
+  .final-screen p{font-size:14px;color:var(--ink-soft);max-width:440px;margin:14px auto 0;}
+  [hidden]{display:none !important;}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="progress-line" id="progressLine"><span class="inf">∞</span><span id="progressText">0% Complete</span><span class="inf">∞</span></div>
+  <div class="question-block" id="questionBlock"></div>
+  <div class="actions" id="actionsBlock">
+    <button type="button" class="next-btn" id="nextBtn" disabled>Next →</button>
+    <button type="button" class="prev-link" id="prevBtn"><span>←</span> Previous Question</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const YESNO = [{v:'yes',l:'Yes'},{v:'no',l:'No'}];
+  const PHQ_SCALE = [{v:'0',l:'0 — Not at all'},{v:'1',l:'1 — Several days'},{v:'2',l:'2 — More than half the days'},{v:'3',l:'3 — Nearly every day'}];
+
+  const EXIT = {
+    seriousAllergy: {title:"We need to review this before continuing", body:"Because of a previous serious reaction you've described, this needs a prescriber to review before we can go any further. A member of our clinical team will be in touch.", ctas:[{label:'Finish for now'}]},
+    eatingDisorderActive: {title:"Let's get you the right support first", body:"Based on your answers, this pathway isn't the right next step for you today. We'd like to help you access the right support instead — a member of our team will be in touch.", ctas:[{label:'Finish for now'}]},
+    selfHarmUrgent: {title:"We're concerned about you and want to help", body:"Thank you for telling us. Because of what you've shared, we're not able to continue with this automated step — this needs a real conversation with someone who can support you properly. A member of our clinical team will contact you directly.", ctas:[{label:'Finish for now'}], crisis:true},
+    immediateDanger: {title:"Your safety matters most right now", body:"You've told us you don't currently feel safe. Please reach out for support right away using the details below.", ctas:[{label:'Finish for now'}], crisis:true},
+    safeguardingConcern: {title:"We need to speak with you directly", body:"Based on what you've told us, a member of our clinical team needs to speak with you personally before we can continue.", ctas:[{label:'Finish for now'}], crisis:true}
+  };
+
+  function scoffScore(a){
+    const items = ['scoff1','scoff2','scoff3','scoff4','scoff5'];
+    if (!items.every(k => a[k] !== undefined)) return null;
+    return items.filter(k => a[k] === 'yes').length;
+  }
+
+  const steps = [
+    {id:'welcome', type:'welcome'},
+    {id:'id_upload', type:'file', q:"Please upload a photo ID", hint:"A passport, driving licence, or national ID card.", required:true},
+    {id:'photo_face', type:'live_photo', facing:'user', q:"Let's take a photo of your face", hint:"Make sure you're in a well-lit space and looking directly at the camera.", required:true},
+    {id:'measurements_verify_group', type:'group', q:"Your current weight and height", fields:[
+      {id:'weightKgVerify', label:'Weight (kg)', type:'text', required:true},
+      {id:'weightDateVerify', label:'Date measured', type:'date', required:true},
+      {id:'heightCmVerify', label:'Height (cm)', type:'text', required:true},
+      {id:'heightDateVerify', label:'Date measured', type:'date', required:true}
+    ]},
+    {id:'weight_method', type:'radio', q:"How would you like to verify your current weight?", options:[
+      {v:'nhs_app', l:'Upload a photo of my NHS App showing my weight'},
+      {v:'scales', l:'Take a live photo of myself on the scales'}
+    ], required:true},
+    {id:'weight_nhs_app_photo', type:'file', q:"Upload a photo of your NHS App showing your weight", hint:"Make sure the weight reading and date are clearly visible.", required:true, condition:a=>a.weight_method==='nhs_app'},
+    {id:'weight_scales_photo', type:'live_photo', facing:'environment', q:"Take a full-body photo of yourself on the scales", hint:"Stand fully on the scales so your whole body and the weight reading are both visible.", required:true, condition:a=>a.weight_method==='scales'}
+  ];
+
+  const answers = {};
+  let currentStepId = 'welcome';
+  let terminal = null;
+  let currentStream = null, mediaRecorder = null, recordedChunks = [], recordTimerHandle = null;
+
+  function visibleSteps(){ return steps.filter(s => !s.condition || s.condition(answers)); }
+
+  function stopCurrentStream(){
+    if (currentStream){ currentStream.getTracks().forEach(t=>t.stop()); currentStream = null; }
+    if (recordTimerHandle){ clearInterval(recordTimerHandle); recordTimerHandle = null; }
+    mediaRecorder = null; recordedChunks = [];
+  }
+
+  function isValid(step){
+    if (step.type === 'welcome') return true;
+    if (step.type === 'file' || step.type === 'live_photo') return !!answers[step.id];
+    if (step.type === 'radio') return !!answers[step.id];
+    if (step.type === 'multi') return Array.isArray(answers[step.id]) && answers[step.id].length > 0;
+    if (step.type === 'group') return step.fields.every(f=>{
+      if (f.condition && !f.condition(answers)) return true;
+      if (!f.required) return true;
+      const v = answers[f.id];
+      return v !== undefined && v !== null && String(v).trim() !== '';
+    });
+    return true;
+  }
+
+  function detectExit(step, a){
+    if (step.id === 'scoff_group' && a.eatingDisorderHistory === 'current') return EXIT.eatingDisorderActive;
+    if (step.id === 'mental_health_group'){
+      if (a.mentalHealthUnstable === 'yes' || a.safeguardingConcern === 'yes') return EXIT.safeguardingConcern;
+      if (a.phq9 && a.phq9 !== '0') return EXIT.selfHarmUrgent;
+    }
+    return null;
+  }
+
+  function fieldControlHtml(f){
+    const v = answers[f.id];
+    if (f.condition && !f.condition(answers)) return '';
+    let inner = '';
+    if (f.type === 'yesno'){
+      inner = `<div class="tri-btns" style="display:flex;gap:8px;margin-top:8px;">` + YESNO.map(o=>`<button type="button" class="tri-btn ${v===o.v?'selected':''}" data-field="${f.id}" data-value="${o.v}" style="padding:9px 16px;">${o.l}</button>`).join('') + `</div>`;
+    } else if (f.type === 'select3'){
+      inner = `<div class="tri-btns" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">` + f.options.map(o=>`<button type="button" class="tri-btn ${v===o.v?'selected':''}" data-field="${f.id}" data-value="${o.v}" style="padding:9px 14px;">${o.l}</button>`).join('') + `</div>`;
+    } else if (f.type === 'textarea'){
+      inner = `<textarea data-field="${f.id}">${v||''}</textarea>`;
+    } else {
+      inner = `<input type="text" data-field="${f.id}" value="${v||''}">`;
+    }
+    return `<div class="field-label-wrap" style="margin:18px 0;"><label class="field-label" style="margin-top:0;">${f.label}${f.required?' *':''}</label>${inner}</div>`;
+  }
+
+  function render(){
+    if (terminal){ renderTerminal(); return; }
+    const list = visibleSteps();
+    let idx = list.findIndex(s=>s.id===currentStepId);
+    if (idx < 0) idx = 0;
+    const step = list[idx];
+    const qBlock = document.getElementById('questionBlock');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+
+    let html = '';
+    if (step.type === 'welcome'){
+      document.getElementById('progressLine').style.display = 'none';
+      html = `<h1>Let's finish verifying your consultation</h1>
+        <div class="key-copy">Thanks for your order. Before your prescriber can make a final decision, we need to verify your identity and current weight, and ask a few more questions. This only takes a few minutes.</div>
+        <div class="option-list"><button type="button" class="capture-btn" id="startBtn">Continue</button></div>`;
+      qBlock.innerHTML = html;
+      document.getElementById('actionsBlock').style.display = 'none';
+      document.getElementById('startBtn').addEventListener('click', ()=>{
+        document.getElementById('actionsBlock').style.display = '';
+        document.getElementById('progressLine').style.display = '';
+        currentStepId = visibleSteps()[1].id;
+        render();
+      });
+      return;
+    }
+    document.getElementById('progressLine').style.display = '';
+    document.getElementById('actionsBlock').style.display = '';
+
+    if (step.type === 'file'){
+      html += `<h1>${step.q}</h1>`;
+      if (step.hint) html += `<p class="question-hint">${step.hint}</p>`;
+      const chosenName = answers[step.id + '_name'];
+      if (answers[step.id] && chosenName){
+        html += `<div class="info-card">✓ File selected: ${chosenName}</div>`;
+        html += `<div class="option-list"><button type="button" class="capture-btn" id="changeFileBtn">Choose a different file</button></div>`;
+      } else {
+        html += `<input type="file" id="fileInput" accept="image/*,application/pdf">`;
+      }
+    } else if (step.type === 'live_photo'){
+      html += `<h1>${step.q}</h1>`;
+      if (step.hint) html += `<p class="question-hint">${step.hint}</p>`;
+      if (answers[step.id]){
+        html += `<div class="info-card" style="padding:0;overflow:hidden;"><img src="${answers[step.id]}" style="width:100%;display:block;border-radius:10px;"></div>`;
+        html += `<div class="option-list"><button type="button" class="capture-btn" id="retakeBtn">Retake photo</button></div>`;
+      } else {
+        html += `<div class="info-card" id="camCard" style="padding:0;overflow:hidden;"><video id="camPreview" autoplay playsinline muted style="width:100%;display:block;border-radius:10px;background:#111;"></video></div>`;
+        html += `<div class="option-list"><button type="button" class="capture-btn" id="captureBtn">Take photo</button></div>`;
+      }
+    } else if (step.type === 'radio'){
+      html += `<h1>${step.q}</h1>`;
+      if (step.hint) html += `<p class="question-hint">${step.hint}</p>`;
+      html += `<div class="choose-label">Choose Option</div>`;
+      html += `<div class="option-list">` + step.options.map(o=>`<button type="button" class="option-btn" data-value="${o.v}" style="${answers[step.id]===o.v?'border-color:var(--ink);':''}">${o.l}</button>`).join('') + `</div>`;
+    } else if (step.type === 'multi'){
+      html += `<h1>${step.q}</h1>`;
+      if (step.hint) html += `<p class="question-hint">${step.hint}</p>`;
+      html += `<div class="choose-label">Choose all that apply</div>`;
+      html += `<div class="option-list">` + step.options.map(o=>{
+        const sel = Array.isArray(answers[step.id]) && answers[step.id].includes(o.v);
+        return `<button type="button" class="option-btn multi" data-value="${o.v}" style="${sel?'border-color:var(--ink);background:#F7F5EF;':''}">${o.l}</button>`;
+      }).join('') + `</div>`;
+    } else if (step.type === 'group'){
+      html += `<h1>${step.q}</h1>`;
+      if (step.intro) html += `<p class="question-hint">${step.intro}</p>`;
+      html += step.fields.map(fieldControlHtml).join('');
+    }
+    qBlock.innerHTML = html;
+    wireStepEvents(step);
+
+    const pct = Math.round((idx/(list.length-1))*100);
+    document.getElementById('progressText').textContent = pct + '% Complete';
+    prevBtn.hidden = (idx <= 1);
+    updateNextState();
+  }
+
+  function wireStepEvents(step){
+    const qBlock = document.getElementById('questionBlock');
+    qBlock.querySelectorAll('.option-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if (step.type === 'multi'){
+          const val = btn.dataset.value;
+          let arr = Array.isArray(answers[step.id]) ? answers[step.id].slice() : [];
+          if (step.exclusive && val === step.exclusive){
+            arr = arr.includes(val) ? [] : [val];
+          } else {
+            if (step.exclusive) arr = arr.filter(v=>v!==step.exclusive);
+            if (arr.includes(val)) arr = arr.filter(v=>v!==val);
+            else arr.push(val);
+          }
+          answers[step.id] = arr;
+        } else {
+          answers[step.id] = btn.dataset.value;
+        }
+        render();
+      });
+    });
+    qBlock.querySelectorAll('[data-field]').forEach(el=>{
+      if (el.tagName === 'BUTTON'){
+        el.addEventListener('click', ()=>{ answers[el.dataset.field] = el.dataset.value; render(); });
+      } else {
+        el.addEventListener('input', ()=>{ answers[el.dataset.field] = el.value; updateNextState(); });
+      }
+    });
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) fileInput.addEventListener('change', ()=>{
+      const has = fileInput.files && fileInput.files.length > 0;
+      answers[step.id] = has;
+      answers[step.id + '_name'] = has ? fileInput.files[0].name : undefined;
+      render();
+    });
+    const changeFileBtn = document.getElementById('changeFileBtn');
+    if (changeFileBtn) changeFileBtn.addEventListener('click', ()=>{
+      answers[step.id] = undefined; answers[step.id + '_name'] = undefined; render();
+    });
+    if (step.type === 'live_photo') initLivePhoto(step);
+  }
+
+  function initLivePhoto(step){
+    if (answers[step.id]){
+      const retakeBtn = document.getElementById('retakeBtn');
+      if (retakeBtn) retakeBtn.addEventListener('click', ()=>{ answers[step.id] = undefined; stopCurrentStream(); render(); });
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({video:{facingMode: step.facing || 'user'}})
+      .then(stream=>{
+        currentStream = stream;
+        const video = document.getElementById('camPreview');
+        if (video) video.srcObject = stream;
+      })
+      .catch(()=>{
+        const card = document.getElementById('camCard');
+        if (card) card.innerHTML = '<p style="padding:16px;margin:0;font-size:13.5px;">Camera access is needed to take this photo. Please allow camera permissions in your browser and try again.</p>';
+      });
+    const captureBtn = document.getElementById('captureBtn');
+    if (captureBtn) captureBtn.addEventListener('click', ()=>{
+      const video = document.getElementById('camPreview');
+      if (!video || !video.videoWidth) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      answers[step.id] = canvas.toDataURL('image/jpeg', 0.9);
+      stopCurrentStream();
+      render();
+    });
+  }
+
+  function updateNextState(){
+    if (terminal) return;
+    const list = visibleSteps();
+    const step = list.find(s=>s.id===currentStepId) || list[0];
+    document.getElementById('nextBtn').disabled = !isValid(step);
+  }
+
+  function goNext(){
+    const list = visibleSteps();
+    const idx = list.findIndex(s=>s.id===currentStepId);
+    const step = list[idx];
+    if (!isValid(step)) return;
+    const exit = detectExit(step, answers);
+    if (exit){ stopCurrentStream(); terminal = exit; render(); window.scrollTo({top:0}); return; }
+    if (idx >= list.length - 1){ stopCurrentStream(); submitForm(); return; }
+    stopCurrentStream();
+    currentStepId = list[idx+1].id;
+    render();
+    window.scrollTo({top:0});
+  }
+  function goPrev(){
+    const list = visibleSteps();
+    const idx = list.findIndex(s=>s.id===currentStepId);
+    if (idx <= 1) return;
+    stopCurrentStream();
+    currentStepId = list[idx-1].id;
+    render();
+    window.scrollTo({top:0});
+  }
+
+  function renderTerminal(){
+    document.getElementById('progressLine').style.display = 'none';
+    const qBlock = document.getElementById('questionBlock');
+    let html = `<h1>${terminal.title}</h1><div class="exit-card"><p>${terminal.body}</p></div>`;
+    if (terminal.crisis){
+      html += `<div class="crisis-box"><strong>If you need to talk to someone now</strong>
+        Samaritans: call 116 123 (free, 24/7)<br>
+        Text "SHOUT" to 85258<br>
+        NHS: call 111<br>
+        If you're in immediate danger, call 999 or go to A&E.</div>`;
+    }
+    html += `<div class="option-list" style="margin-top:22px;">` + terminal.ctas.map((c,i)=>`<button type="button" class="capture-btn" data-exit-cta="${i}">${c.label}</button>`).join('') + `</div>`;
+    qBlock.innerHTML = html;
+    document.getElementById('actionsBlock').style.display = 'none';
+    qBlock.querySelectorAll('[data-exit-cta]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        qBlock.innerHTML = `<div class="final-screen"><h1>Thank you</h1><p>A member of our clinical team will be in touch. There's nothing else you need to do right now.</p></div>`;
+      });
+    });
+  }
+
+  function submitForm(){
+    document.getElementById('progressLine').style.display = 'none';
+    document.getElementById('actionsBlock').style.display = 'none';
+    document.getElementById('questionBlock').innerHTML = `<div class="final-screen">
+      <h1>Verification complete</h1>
+      <p>Thank you — we've received everything we need. Your prescriber will now complete their review, and you'll hear from us before any treatment is dispatched.</p>
+    </div>`;
+    window.scrollTo({top:0});
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', goNext);
+  document.getElementById('prevBtn').addEventListener('click', goPrev);
+  render();
+})();
+</script>
+</body>
+</html>
